@@ -3,6 +3,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestj
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { Coffee } from './entities/coffee.entitiy';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -11,9 +13,8 @@ export class CoffeesController {
   }
 
   @Get()
-  findAll(@Query() paginationQuery) {
-    // const { limit, offset } = paginationQuery;
-    return this.coffeeSvc.findAll();
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
+    return this.coffeeSvc.findAll(paginationQuery);
   }
 
   @Get(':id')
@@ -22,7 +23,7 @@ export class CoffeesController {
   }
 
   @Post()
-  addCoffee(@Body() createCoffeeDto: CreateCoffeeDto): void {
+  addCoffee(@Body() createCoffeeDto: CreateCoffeeDto): Promise<Coffee> {
     return this.coffeeSvc.create(createCoffeeDto);
   }
 
